@@ -1,148 +1,80 @@
 public class SwimmingMovement : MonoBehaviour
 {
-	public CharacterController2D controller;
-	public Animator animator;
+    public CharacterController2D controller;
+    public Animator animator;
 
-	private float swimSpeed = 0f;
+    private float swimSpeed = 0f;
 
-	float horizontalSwim = 0f;
-	bool isInRange;
-	bool isInVehicle;
-
-
-
-	void Start()
-    {
-		isInVehicle = false;
-    }
+    float horizontalSwim = 0f;
+    bool isInRange = false;
+    bool isInVehicle = false;
 
     void Update()
-	{
+    {
+        horizontalSwim = Input.GetAxisRaw("Swimming") * swimSpeed;
+        animator.SetFloat("Swim", Mathf.Abs(horizontalSwim));
 
-		horizontalSwim = Input.GetAxisRaw("Swimming") * swimSpeed;
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            if (Input.GetKey(KeyCode.D) && isInVehicle && StaminaBar.currentStamina >= 20) {
+                StaminaBar.instance.UseStamina(5);
+                swimSpeed = 150;
+                animator.SetBool("SubNitro", true);
+                animator.SetBool("SubSpeed", false);
+            } else if (Input.GetKey(KeyCode.A) && isInVehicle && StaminaBar.currentStamina >= 20) {
+                StaminaBar.instance.UseStamina(5);
+                swimSpeed = 150;
+                animator.SetBool("SubNitro", true);
+                animator.SetBool("SubSpeed", false);
+            } else if (isInVehicle && StaminaBar.currentStamina <= 20) {
+                swimSpeed = 40;
+                animator.SetBool("SubNitro", false);
+                animator.SetBool("SubSpeed", true);
+            }
+        } else if (Input.GetKey(KeyCode.D) && isInVehicle) {
+            swimSpeed = 40;
+            animator.SetBool("SubNitro", false);
+            animator.SetBool("SubSpeed", true);
+        } else if (Input.GetKey(KeyCode.A) && isInVehicle) {
+            swimSpeed = 40;
+            animator.SetBool("SubNitro", false);
+            animator.SetBool("SubSpeed", true);
+        } else if (Input.GetKey(KeyCode.W) && isInVehicle) {
+            animator.SetBool("SubNitro", true);
+            animator.SetBool("SubSpeed", false);
+        } else if (Input.GetKey(KeyCode.S) && isInVehicle) {
+            animator.SetBool("SubNitro", false);
+            animator.SetBool("SubSpeed", true);
+        } else if (!Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && isInVehicle) {
+            animator.SetBool("SubSpeed", false);
+        }
+    }
 
-		animator.SetFloat("Swim", Mathf.Abs(horizontalSwim));
-
-		if (Input.GetKey(KeyCode.LeftShift) == false & Input.GetKey(KeyCode.D) == false & Input.GetKey(KeyCode.A) == false & Input.GetKey(KeyCode.W) == false & Input.GetKey(KeyCode.S) == false & isInVehicle == true)
-		{
-			animator.SetBool("SubSpeed", false);
-		}
-
-		if (Input.GetKey(KeyCode.LeftShift) == true & Input.GetKey(KeyCode.D) == true & isInVehicle == true & StaminaBar.currentStamina >= 20)
-		{
-			StaminaBar.instance.UseStamina(5);
-			swimSpeed = 150;
-			animator.SetBool("SubNitro", true);
-			animator.SetBool("SubSpeed", false);
-		}
-		if (Input.GetKey(KeyCode.LeftShift) == true & Input.GetKey(KeyCode.D) == true & isInVehicle == true & StaminaBar.currentStamina <= 20)
-		{
-			swimSpeed = 40;
-			animator.SetBool("SubNitro", false);
-			animator.SetBool("SubSpeed", true);
-		}
-
-		if (Input.GetKey(KeyCode.LeftShift) == false & Input.GetKey(KeyCode.D) == true & isInVehicle == true)
-		{
-			swimSpeed = 40;
-			animator.SetBool("SubNitro", false);
-			animator.SetBool("SubSpeed", true);
-		}
-
-		if (Input.GetKey(KeyCode.LeftShift) == true & Input.GetKey(KeyCode.A) == true & isInVehicle == true & StaminaBar.currentStamina >= 20)
-		{
-			StaminaBar.instance.UseStamina(5);
-			swimSpeed = 150;
-			animator.SetBool("SubNitro", true);
-			animator.SetBool("SubSpeed", false);
-		}
-		if (Input.GetKey(KeyCode.LeftShift) == true & Input.GetKey(KeyCode.A) == true & isInVehicle == true & StaminaBar.currentStamina <= 20)
-		{
-			swimSpeed = 40;
-			animator.SetBool("SubNitro", false);
-			animator.SetBool("SubSpeed", true);
-		}
-		if (Input.GetKey(KeyCode.LeftShift) == false & Input.GetKey(KeyCode.A) == true & isInVehicle == true)
-		{
-			swimSpeed = 40;
-			animator.SetBool("SubNitro", false);
-			animator.SetBool("SubSpeed", true);
-		}
-
-		if (Input.GetKey(KeyCode.LeftShift) == true & Input.GetKey(KeyCode.W) == true & isInVehicle == true)
-		{
-			animator.SetBool("SubNitro", true);
-			animator.SetBool("SubSpeed", false);
-		}
-		if (Input.GetKey(KeyCode.LeftShift) == false & Input.GetKey(KeyCode.W) == true & isInVehicle == true)
-		{
-			animator.SetBool("SubNitro", false);
-			animator.SetBool("SubSpeed", true);
-		}
-
-		if (Input.GetKey(KeyCode.LeftShift) == true & Input.GetKey(KeyCode.S) == true & isInVehicle == true)
-		{
-			animator.SetBool("SubNitro", true);
-			animator.SetBool("SubSpeed", false);
-		}
-		if (Input.GetKey(KeyCode.LeftShift) == false & Input.GetKey(KeyCode.S) == true & isInVehicle == true)
-		{
-			animator.SetBool("SubNitro", false);
-			animator.SetBool("SubSpeed", true);
-		}
-
-
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			if (isInRange == true)
-			{
-				if (isInVehicle == false)
-				{
-					isInVehicle = true;
-				}
-			}
-		}
-		if (Input.GetKeyDown(KeyCode.E))
+    void OnTriggerEnter2D(Collider2D other)
+    {
+    if (other.gameObject.CompareTag("Water"))
         {
-			if (isInRange == false)
-			{
-				if (isInVehicle == true)
-				{
-					isInVehicle = false;
-				}
-			}
-		}
+        swimSpeed = 20;
+        }
+    if (other.gameObject.CompareTag("Submarine"))
+        {
+        isInRange = true;
+        }
+    }
 
-	}
+    void OnTriggerExit2D(Collider2D other)
+    {
+    if (other.gameObject.CompareTag("Water"))
+        {
+        swimSpeed = 0;
+        }
+    if (other.gameObject.CompareTag("Submarine"))
+        {
+        isInRange = false;
+        }
+    }
 
-	void OnTriggerEnter2D(Collider2D other)
-	{
-		if (other.gameObject.CompareTag("Water") == true)
-		{
-			swimSpeed = 20;
-		}
-		if (other.gameObject.CompareTag("Submarine") == true)
-		{
-			isInRange = true;
-		}
-
-	}
-
-	void OnTriggerExit2D(Collider2D other)
-	{
-		if (other.gameObject.CompareTag("Water") == true)
-		{
-			swimSpeed = 0;
-		}
-		if (other.gameObject.CompareTag("Submarine") == true)
-		{
-			isInRange = false;
-		}
-	}
-
-	void FixedUpdate()
-	{
-		// Move our character
-		controller.Swim(horizontalSwim * Time.fixedDeltaTime);
-	}
+    void FixedUpdate()
+    {
+    controller.Swim(horizontalSwim * Time.fixedDeltaTime);
+    }
 }
