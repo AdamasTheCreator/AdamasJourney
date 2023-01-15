@@ -1,105 +1,87 @@
 public class Teleporting : MonoBehaviour
 {
-    public float xaxis;
-    public float yaxis;
-    bool rightSide;
-    bool leftSide;
-    bool isInVehicle;
-    bool isInCollider;
-    bool canPressKey;
-    bool isInWater;
+    public float xaxis, yaxis;
+    bool rightSide, leftSide, isInVehicle, isInCollider, canPressKey, isInWater;
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) == true && rightSide == true && isInVehicle == false)
+        if (Input.GetKeyDown(KeyCode.E) && rightSide && !isInVehicle)
         {
             transform.position = new Vector2(transform.position.x - xaxis, transform.position.y + yaxis);
         }
-        if (Input.GetKeyDown(KeyCode.E) == true && leftSide == true && isInVehicle == false)
+        else if (Input.GetKeyDown(KeyCode.E) && leftSide && !isInVehicle)
         {
             transform.position = new Vector2(transform.position.x + xaxis, transform.position.y + yaxis);
         }
 
-        if (isInVehicle == true & isInWater == true)
+        if (isInVehicle && isInWater)
         {
             canPressKey = true;
         }
-        if (isInVehicle == false & isInWater == true)
+        else if (!isInVehicle && isInWater)
         {
             canPressKey = false;
         }
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (isInCollider == true)
+            if (isInCollider)
             {
-                if (isInVehicle == false)
+                if (!isInVehicle)
                 {
-                    if (canPressKey == false)
+                    if (!canPressKey)
                     {
                         isInVehicle = true;
                     }
                 }
             }
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (isInCollider == false)
+            else if (isInVehicle)
             {
-                if (isInVehicle == true)
+                if (canPressKey)
                 {
-                    if (canPressKey == true)
-                    {
-                        isInVehicle = false;
-                    }
+                    isInVehicle = false;
                 }
             }
         }
     }
 
-
-
-
-
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("RightSide") == true)
+        if (other.gameObject.CompareTag("RightSide"))
         {
             rightSide = true;
         }
-        if (other.gameObject.CompareTag("LeftSide") == true)
+        else if (other.gameObject.CompareTag("LeftSide"))
         {
             leftSide = true;
         }
-        if (other.gameObject.CompareTag("Submarine") == true)
+        else if (other.gameObject.CompareTag("Submarine"))
         {
             isInCollider = true;
         }
-        if (other.gameObject.CompareTag("Water") == true)
+        else if (other.gameObject.CompareTag("Water"))
         {
             isInWater = true;
-
         }
     }
+
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("RightSide") == true)
+        if (other.gameObject.CompareTag("RightSide"))
         {
             rightSide = false;
         }
-        if (other.gameObject.CompareTag("LeftSide") == true)
+        else if (other.gameObject.CompareTag("LeftSide"))
         {
             leftSide = false;
         }
-        if (other.gameObject.CompareTag("Submarine") == true)
+        else if (other.gameObject.CompareTag("Submarine"))
         {
             isInCollider = false;
         }
-        if (other.gameObject.CompareTag("Water") == true)
+        else if (other.gameObject.CompareTag("Water"))
         {
             isInWater = false;
-
         }
     }
-
 }
