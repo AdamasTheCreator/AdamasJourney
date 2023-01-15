@@ -16,11 +16,7 @@ public class CharacterController2D : MonoBehaviour
 	private void Awake()
 	{
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
-
 	}
-
-
-
 
     void OnTriggerEnter2D(Collider2D other)
 	{
@@ -89,7 +85,6 @@ public class CharacterController2D : MonoBehaviour
 				Flip();
 			}
 	}
-
 
 	public void Flip()
 	{
