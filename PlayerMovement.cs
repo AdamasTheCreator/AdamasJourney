@@ -13,39 +13,32 @@ public class PlayerMovement : MonoBehaviour {
     bool isInWater = false;
     bool oxygenLevel = false;
 
-    // Update is called once per frame
     void Update()
     {
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
         animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
-        if (Input.GetKey(KeyCode.LeftShift)) {
-            if (Input.GetKey(KeyCode.D) && !isInWater && StaminaBar.currentStamina >= 20) {
+        if (Input.GetKey(KeyCode.LeftShift) && !isInWater && StaminaBar.currentStamina >= 20) {
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A)) {
                 sprintSpeed = 55;
                 runSpeed = 0f;
                 StaminaBar.instance.UseStamina(2);
-            } else if (Input.GetKey(KeyCode.A) && !isInWater && StaminaBar.currentStamina >= 20) {
-                sprintSpeed = 55;
-                runSpeed = 0f;
-                StaminaBar.instance.UseStamina(2);
-            } else if (StaminaBar.currentStamina <= 20) {
+            } else {
                 sprintSpeed = 0;
                 runSpeed = 30f;
             }
-        } else if (Input.GetKey(KeyCode.D) && !isInWater) {
-            sprintSpeed = 0;
-            runSpeed = 30f;
-        } else if (Input.GetKey(KeyCode.A) && !isInWater) {
+        } else if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A)) && !isInWater) {
             sprintSpeed = 0;
             runSpeed = 30f;
         }
 
-        if (isInWater && !isInVehicle && !oxygenLevel) {
-            OxygenBar.O.UseOxygen(1);
-        } else if (isInWater && !isInVehicle && oxygenLevel && OxygenBar.currentOxygen <= 1999) {
-            OxygenBar.O.UseOxygen(-10);
-        } else if (isInWater && !isInVehicle && oxygenLevel && OxygenBar.currentOxygen >= 1999) {
-            OxygenBar.O.UseOxygen(0);
+        if (isInWater && !isInVehicle) {
+            if (!oxygenLevel)
+                OxygenBar.O.UseOxygen(1);
+            else if (OxygenBar.currentOxygen <= 1999)
+                OxygenBar.O.UseOxygen(-10);
+            else
+                OxygenBar.O.UseOxygen(0);
         }
     }
 }
