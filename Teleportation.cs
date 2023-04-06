@@ -5,83 +5,45 @@ public class Teleporting : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && rightSide && !isInVehicle)
-        {
-            transform.position = new Vector2(transform.position.x - xaxis, transform.position.y + yaxis);
-        }
-        else if (Input.GetKeyDown(KeyCode.E) && leftSide && !isInVehicle)
-        {
-            transform.position = new Vector2(transform.position.x + xaxis, transform.position.y + yaxis);
-        }
-
-        if (isInVehicle && isInWater)
-        {
-            canPressKey = true;
-        }
-        else if (!isInVehicle && isInWater)
-        {
-            canPressKey = false;
-        }
-
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (isInCollider)
-            {
-                if (!isInVehicle)
-                {
-                    if (!canPressKey)
-                    {
-                        isInVehicle = true;
-                    }
-                }
-            }
-            else if (isInVehicle)
-            {
-                if (canPressKey)
-                {
-                    isInVehicle = false;
-                }
-            }
+            if (rightSide && !isInVehicle)
+                transform.position = new Vector2(transform.position.x - xaxis, transform.position.y + yaxis);
+            else if (leftSide && !isInVehicle)
+                transform.position = new Vector2(transform.position.x + xaxis, transform.position.y + yaxis);
+
+            if (isInWater)
+                canPressKey = isInVehicle ? true : false;
         }
+
+        if (isInCollider && !isInVehicle && !canPressKey)
+            isInVehicle = true;
+        else if (isInVehicle && canPressKey)
+            isInVehicle = false;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("RightSide"))
-        {
+        if (other.CompareTag("RightSide"))
             rightSide = true;
-        }
-        else if (other.gameObject.CompareTag("LeftSide"))
-        {
+        else if (other.CompareTag("LeftSide"))
             leftSide = true;
-        }
-        else if (other.gameObject.CompareTag("Submarine"))
-        {
+        else if (other.CompareTag("Submarine"))
             isInCollider = true;
-        }
-        else if (other.gameObject.CompareTag("Water"))
-        {
+        else if (other.CompareTag("Water"))
             isInWater = true;
-        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("RightSide"))
-        {
+        if (other.CompareTag("RightSide"))
             rightSide = false;
-        }
-        else if (other.gameObject.CompareTag("LeftSide"))
-        {
+        else if (other.CompareTag("LeftSide"))
             leftSide = false;
-        }
-        else if (other.gameObject.CompareTag("Submarine"))
-        {
+        else if (other.CompareTag("Submarine"))
             isInCollider = false;
-        }
-        else if (other.gameObject.CompareTag("Water"))
-        {
+        else if (other.CompareTag("Water"))
             isInWater = false;
-        }
     }
 }
+
